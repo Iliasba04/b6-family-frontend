@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
-  backendUri : 'http://[::1]:3000',
-  //backendUri : 'https://b6-family-dues-backend.vercel.app',  
+  //backendUri : 'http://[::1]:3000',
+  backendUri : 'https://b6-family-dues-backend.vercel.app',  
+  var:""
 };
