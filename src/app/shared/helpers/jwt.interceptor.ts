@@ -22,12 +22,14 @@ export class JwtInterceptor implements HttpInterceptor {
       if (currentToken) {
         let headers = request.headers
           .set('Access-Control-Allow-Origin', '*')
+          .set('Access-Control-Allow-Headers','*')
           .set('x-access-token', currentToken)
           .set('Accept', 'application/json')
         request = request.clone({ headers });
       } else {
         let headers = request.headers
-          .set('Access-Control-Allow-Origin', '*')
+          .set('Access-Control-Allow-Origin', '*') 
+          .set('Access-Control-Allow-Headers','*')
           .set('Accept', 'application/json')
         request = request.clone({ headers });
       }
