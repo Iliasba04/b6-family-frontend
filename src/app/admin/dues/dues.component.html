@@ -1,0 +1,221 @@
+<div class="w-full min-h-screen flex flex-col p-3 space-y-6">
+    <div class="flex space-x-2 items-center">
+        <span class="w-14 h-14 rounded-full bg-green2 grid place-content-center"><i class="bi bi-card-checklist text-3xl text-greenColor"></i></span>
+         <span class="text-3xl font-montserrat font-medium text-greenColor">Cotisations</span>
+    </div>
+    <!-- Search part -->
+    <div class="w-full flex space-x-4 font-montserrat">
+        <input type="text" placeholder="Rechercher une cotisation...."
+                class="w-full border outline-none px-2 h-11 bg-gray-100
+                focus:border-t-0 focus:border-x-0
+                focus:border-b-4 focus:border-b-greenColor focus:rounded-none focus:bg-green2 focus:shadow-sm
+                ">
+        <button type="button"
+                data-te-toggle="modal"
+                data-te-target="#exampleModal"
+                data-te-ripple-init
+                data-te-ripple-color="light"
+                class="w-60 h-11 flex space-x-2 justify-center items-center bg-itemColorActive text-white px-3 text-sm font-semibold shadow-sm rounded-sm"
+                      id="menu-button" aria-expanded="true" aria-haspopup="true">
+                <span class="text-lg">Ajouter</span>
+                <i class="bi bi-plus-square text-xl"></i>
+        </button>
+        <div class="relative inline-block text-left">
+            <div>
+                <button type="button"
+                        class="w-40 h-11 flex space-x-2 justify-center items-center bg-itemColorActive text-white px-3 text-sm font-semibold shadow-sm rounded-sm"
+                              id="menu-button" aria-expanded="true" aria-haspopup="true" (click)="hide = !hide">
+                        <span class="text-lg">Filtrer</span>
+                        <i class="bi bi-funnel text-xl"></i>
+                </button>
+            </div>    
+            <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" 
+                         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" *ngIf="hide === true">
+                <div class="py-1" role="none">
+                    <a class="text-darkBlue block px-4 py-2 text-sm hover:text-itemColorActive cursor-pointer" role="menuitem">OM</a>
+                    <a class="text-darkBlue block px-4 py-2 text-sm hover:text-itemColorActive cursor-pointer" role="menuitem">Wave</a>
+                </div>
+            </div>
+
+        </div>        
+    </div>
+    <div class="flex justify-between items-center flex-wrap">
+        <div *ngFor="let item of months" class="w-fit flex space-x-2 px-1 shadow-md">
+                <input type="checkbox" name="month" [checked]="selectedMonth === item.label" (change)="selectMonth(item.label)">
+                <span>{{item.label}}</span>
+        </div>
+    </div>
+    <!-- Table -->
+    <table>
+        <thead> 
+            <tr class="bg-green2 text-left font-montserrat text-sm text-greenColor">
+                <th class="py-4 ps-2">Prénom</th>
+                <th class="py-4">Nom</th>
+                <th class="py-4">Montant</th>
+                <th class="py-4">Mois</th>
+                <th class="py-4">Date</th>
+                <th class="py-4">Opérateur</th>
+                <th class="py-4 text-center">Actions</th>
+                <th class="py-4">
+                    <i class="bi bi-funnel-fill text-xl"></i>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="font-montserrat">
+            <ng-container *ngIf="!loader;else tmplData">
+                <tr *ngFor="let item of displayedDues | paginate: { itemsPerPage: 8, currentPage: p}" 
+                class="border-b last:border-b-0 odd:bg-white even:bg-green2"> 
+                <td class="py-4 ps-2">{{item.contributorId.firstname}}</td>
+                <td class="py-4">{{item.contributorId.lastname}}</td>
+                <td class="py-4">{{item.amount}}</td>
+                <td class="py-4">{{item.created_at | date : 'MMMM'}}</td>
+                <td class="py-4">{{item.created_at | date : 'fullDate'}}</td>
+                <td class="py-4 pe-2">
+                    <span class="block p-2 text-sm text-center rounded-md" 
+                          [class]="{ 'bg-thinBlue' : item.operator === 'WAVE', 'text-blueText' : item.operator === 'WAVE',
+                                     'bg-thinOrange' : item.operator === 'OM', 'text-orangeText' : item.operator === 'OM',
+                                    }">
+                        {{item.operator}}
+                    </span>
+                </td>
+                <td class="py-4 flex justify-center">
+                    <button class="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center  hover:bg-gray-100"
+                            data-te-toggle="modal"
+                            data-te-target="#updateModal"
+                            data-te-ripple-init
+                            data-te-ripple-color="light" (click)="getUpdatedDue(item._id)">
+                        <i class="bi bi-pencil-square mr-1"></i>
+                        <span>Modifier</span>
+                      </button>
+                    <!--<div>
+
+                        <div class="group dropdown inline-block relative">
+                          <button class="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center">
+                            <span class="mr-1">Action</span>
+                            <i class="bi bi-chevron-down"></i>
+                          </button>
+                          <ul class="dropdown-menu absolute hidden w-40 bg-gray-100 text-gray-700 mt-[1px] shadow-md group-hover:block group-hover:z-10">
+                            <li 
+                                class="flex items-center space-x-2 mb-3 ps-2 py-2 cursor-pointer hover:bg-gray-300">
+                                <i class="bi bi-pencil-square "></i><span>Modifier</span></li>
+                            <li class="flex items-center space-x-2 ps-2 py-2 cursor-pointer hover:bg-gray-300">
+                                <i class="bi bi-plus-circle"></i><span>{{item.active ? 'Bloquer' : 'Activer'}}</span></li>
+                          </ul>
+                        </div>
+                      
+                      </div>-->
+                </td>
+                <td>
+                    <input type="checkbox" name="user" class="w-4 h-4" [checked]="selectedUser === item.contributorId._id" (change)="filterByUser(item.contributorId._id)">
+                </td>
+                
+            </tr>
+            <tr *ngIf="!displayedDues.length">
+                <td colspan="6">
+                    <div class="flex justify-center items-center py-4">
+                        <span class="text-2xl font-semibold">Il y'a pas de cotisations disponible</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                   <div class="h-fit flex justify-center items-center py-2">
+                        <pagination-controls 
+                            (pageChange)="pageChanged($event)"
+                            [directionLinks]="true"
+                            previousLabel="Préc"
+                            nextLabel="Suiv"
+                            [autoHide]="true"
+                            [responsive]="true">
+                        </pagination-controls>
+                   </div>
+              </td>
+            </tr>
+            </ng-container>
+            <ng-template #tmplData>
+                <tr>
+                    <td colspan="7">
+                        <app-loader></app-loader>
+                  </td>
+                </tr>
+                
+            </ng-template>
+           
+        </tbody>
+    </table>
+
+
+    <!-- CREATE DUE MODAL -->
+    <div data-te-modal-init
+        class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+            <div data-te-modal-dialog-ref
+                 class="pointer-events-none absolute right-7 h-auto w-full translate-x-[100%] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px] min-[992px]:max-w-[800px]">
+                <div
+                    class="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+                    <div class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                        <!--Modal title-->
+                        <h5 class="text-3xl font-medium font-barlow text-neutral-800 dark:text-neutral-200" id="exampleModalLabel">Ajout</h5>
+                        <!--Close button-->
+                        <button type="button" data-te-modal-dismiss aria-label="Close" id="close_button"
+                            class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div> 
+ 
+                    <!--Modal body-->
+                    <div class="relative flex-auto p-4" data-te-modal-body-ref>
+                        <form [formGroup]="createDueForm" (ngSubmit)="createDue()">
+                            <div class="flex flex-col mb-3">
+                                <label for="contributorId" class="w-fit mb-3">Cotiseur</label>
+                                <select name="contributorId" formControlName="contributorId"
+                                    class="border outline-none px-2 h-11 rounded-md bg-gray-100
+                                    focus:border-t-0 focus:border-x-0
+                                    focus:border-b-4 focus:border-b-greenColor focus:rounded-none focus:bg-green2 focus:shadow-sm">
+                                    <option *ngFor="let item of displayedUsers" [value]="item._id">{{item.firstname + ' '+ item.lastname}}</option>
+                                </select>
+                                <div class="mt-2" *ngIf="createDueForm.get('role')?.invalid && isSubmitted">
+                                    <p class="text-red-500 text-sm" *ngIf="createDueForm.get('operator')?.hasError('required')">L'opérateur est requis</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col mb-3">
+                                <label for="phone" class="w-fit mb-3">Montant</label>
+                                <input type="number" name="amount" id="amount_id" formControlName="amount"
+                                       class="border outline-none px-2 h-11 rounded-md bg-gray-100
+                                       focus:border-t-0 focus:border-x-0
+                                       focus:border-b-4 focus:border-b-greenColor focus:rounded-none focus:bg-green2 focus:shadow-sm
+                                       ">
+        
+                                <div class="mt-2" *ngIf="createDueForm.get('amount')?.invalid && isSubmitted">
+                                    <p class="text-red-500 text-sm" *ngIf="createDueForm.get('amount')?.hasError('required')">Le montant est requis</p>
+                                </div>
+                            </div>
+                           
+                            <div class="flex flex-col mb-3">
+                                <label for="operator" class="w-fit mb-3">Opérateur</label>
+                                <select name="operator" formControlName="operator"
+                                    class="border outline-none px-2 h-11 rounded-md bg-gray-100
+                                    focus:border-t-0 focus:border-x-0
+                                    focus:border-b-4 focus:border-b-greenColor focus:rounded-none focus:bg-green2 focus:shadow-sm">
+                                    <option value="WAVE">WAVE</option>
+                                    <option value="OM">OM</option>
+                                </select>
+                                <div class="mt-2" *ngIf="createDueForm.get('role')?.invalid && isSubmitted">
+                                    <p class="text-red-500 text-sm" *ngIf="createDueForm.get('operator')?.hasError('required')">L'opérateur est requis</p>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit"
+                                        class="w-60 bg-itemColorActive text-white text-center px-4 py-2 rounded-md 
+                                        active:bg-red-500 active:scale-95 text-xl disabled:bg-red-200">Ajouter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <app-update-due [updatedDue]="updatedDueFromParent"></app-update-due>
+</div>

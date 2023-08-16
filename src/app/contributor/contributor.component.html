@@ -1,0 +1,52 @@
+<div class="w-full min-h-screen bg-green2 flex justify-center items-center py-5">
+    <div class="w-full lg:w-11/12 flex flex-row space-x-4 md:space-x-8 ">
+        <div class="flex flex-col bg-greenColor text-white min-h-screen transition-all font-montserrat" [class]="{ 'w-96' : toggled === false, 'w-28' : toggled === true}">
+           <div class="w-full flex justify-end items-center">
+                <span class="cursor-pointer w-12 h-12 grid place-content-center rounded-full
+                       active:bg-slate-200" (click)="toggled = !toggled">
+                    <i class="bi text-2xl" [class]="{'bi-list' : toggled === true , 'bi-x-lg' : toggled === false}"></i>
+                </span>
+           </div>
+           <div class="flex justify-center items-center mb-10">
+                <img src="../../assets/logos/b6-family-white-logo.png" alt="boldof logo">
+           </div>
+           <hr> 
+           <ul class="flex flex-col justify-center gap-y-8 my-8">
+                <!--<li class="w-full py-2" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="flex items-center space-x-4 px-4" routerLink="/contributor/" [class]="{ 'justify-center' : toggled , 'justify-start' : !toggled}">
+                    <i class="bi bi-bar-chart text-3xl"></i>
+                    <span class="text-xl" [class]="{ 'hidden' : toggled , 'block' : !toggled}">Dashboard</span>
+                </a></li>-->
+                <li class="w-full py-2" routerLinkActive="active">
+                    <a class="flex items-center space-x-4 px-4" routerLink="/contributor/dues" [class]="{ 'justify-center' : toggled , 'justify-start' : !toggled}">
+                        <i class="bi bi-coin text-3xl"></i>
+                        <span class="text-xl" [class]="{ 'hidden' : toggled , 'block' : !toggled}"> Mes cotisations</span>
+                </a></li>
+                <li class="w-full py-2" routerLinkActive="active">
+                    <a class="flex items-center space-x-4 px-4" routerLink="/contributor/projects" [class]="{ 'justify-center' : toggled , 'justify-start' : !toggled}">
+                        <i class="bi bi-card-checklist text-3xl"></i>
+                        <span class="text-xl" [class]="{ 'hidden' : toggled , 'block' : !toggled}">Nos projets</span>
+                </a></li>
+                <li class="w-full py-2" routerLinkActive="active">
+                <a class="flex items-center space-x-4 px-4" routerLink="/contributor/settings" [class]="{ 'justify-center' : toggled , 'justify-start' : !toggled}">
+                    <i class="bi bi-gear text-3xl"></i>
+                    <span class="text-xl" [class]="{ 'hidden' : toggled , 'block' : !toggled}">paramètres</span>
+                </a></li>
+
+                <li class="w-full py-2">
+                    <div  class="flex items-center px-4" [class]="{ 'justify-center' : toggled , 'justify-start' : !toggled}">
+                        <button class="flex justify-center items-center space-x-2 bg-itemColorActive text-white text-center p-2 rounded-md 
+                                     active:bg-red-500 active:scale-95 text-xl disabled:bg-red-200" (click)="logOut()">
+                            <i class="bi bi-box-arrow-left"></i>
+                            <span [class]="{ 'hidden' : toggled , 'block' : !toggled}">Déconnexion</span>
+                        </button>
+                    </div>
+                </li>
+           </ul>
+        </div>
+        
+        <div class="w-full min-h-screen bg-white">
+           <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

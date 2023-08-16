@@ -1,0 +1,125 @@
+<div class="w-full min-h-screen flex flex-col p-3 space-y-6">
+    <div class="flex space-x-2 items-center">
+        <span class="w-14 h-14 rounded-full bg-green2 grid place-content-center"><i class="bi bi-card-checklist text-3xl text-greenColor"></i></span>
+         <span class="text-3xl font-montserrat font-medium text-greenColor">Mes cotisations</span>
+    </div>
+    <ng-container *ngIf="!dueLoader;else totalTmpl">
+        <div class="grid grid-cols-2 gap-5" >
+            <div class="px-2 py-5 bg-green2 shadow">
+                <p class="text-xl font-montserrat">Montant cotisé : <span class="text-2xl font-semibold px-2">{{totalDues.dueForContributor[0].totalAmount}} FCFA</span></p>
+            </div>
+            <div class="px-2 py-5 bg-green2 shadow">
+                <p class="text-xl font-montserrat">Montant total cotisé : <span class="text-2xl font-semibold px-2">{{totalDues.totalDues[0].totalAmount}} FCFA</span></p>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #totalTmpl>
+        <div class="grid grid-cols-2 gap-5">
+            <div class="flex justify-center items-center px-2 py-5 bg-white shadow">
+                <div class="w-full h-6 bg-slate-200 animate-pulse"></div>
+            </div>
+            <div class="flex justify-center items-center px-2 py-5 bg-white shadow">
+                <div class="w-full h-6 bg-slate-200 animate-pulse"></div>
+            </div>
+        </div>
+    </ng-template>
+    <!-- Search part -->
+    <div class="w-full flex space-x-4 font-montserrat">
+        <input type="text" placeholder="Rechercher une cotisation...."
+                class="w-full border outline-none px-2 h-11 bg-gray-100
+                focus:border-t-0 focus:border-x-0
+                focus:border-b-4 focus:border-b-greenColor focus:rounded-none focus:bg-green2 focus:shadow-sm
+                ">
+        <div class="relative inline-block text-left">
+            <div>
+                <button type="button"
+                        class="flex space-x-2 w-full h-11 justify-center items-center bg-itemColorActive text-white px-3 text-sm font-semibold shadow-sm"
+                              id="menu-button" aria-expanded="true" aria-haspopup="true" (click)="hide = !hide">
+                        <span class="text-lg">Filtrer</span>
+                        <i class="bi bi-funnel text-xl"></i>
+                </button>
+            </div>    
+            <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" 
+                         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" *ngIf="hide === true">
+                <div class="py-1" role="none">
+                    <a class="text-darkBlue block px-4 py-2 text-sm hover:text-itemColorActive cursor-pointer" role="menuitem"
+                     (click)="filterByOperator('OM')">OM</a>
+                    <a class="text-darkBlue block px-4 py-2 text-sm hover:text-itemColorActive cursor-pointer" role="menuitem"
+                    (click)="filterByOperator('WAVE')">WAVE</a>
+                    <a class="text-darkBlue block px-4 py-2 text-sm hover:text-itemColorActive cursor-pointer" role="menuitem"
+                    (click)="filterByOperator('Tout')">Tout</a>
+                </div>
+            </div>
+
+        </div>        
+    </div>
+    <div class="flex justify-between items-center flex-wrap">
+        <div *ngFor="let item of months" class="w-fit flex space-x-2 px-1 shadow-md">
+                <input type="checkbox" name="month" [checked]="selectedMonth === item.label" (change)="selectMonth(item.label)">
+                <span>{{item.label}}</span>
+        </div>
+    </div>
+    <!-- Table -->
+    <table>
+        <thead>
+            <tr class="bg-green2 text-left font-montserrat text-sm text-greenColor">
+                <!--<th class="py-4 ps-2">Prénom</th>
+                <th class="py-4">Nom</th>-->
+                <th class="py-4 ps-2">Montant</th>
+                <th class="py-4">Mois</th>
+                <th class="py-4">Date</th>
+                <th class="py-4 text-center">Opérateur</th>
+            </tr>
+        </thead>
+        <tbody class="font-montserrat">
+            <ng-container *ngIf="!loader;else tmplData">
+                <tr *ngFor="let item of displayedDues | paginate: { itemsPerPage: 8, currentPage: p}" 
+                class="border-b last:border-b-0 odd:bg-white even:bg-green2"> 
+                <!--<td class="py-4 ps-2">{{item.contributorId.firstname}}</td>
+                <td class="py-4">{{item.contributorId.lastname}}</td>-->
+                <td class="py-4 ps-2">{{item.amount}}</td>
+                <td class="py-4">{{item.created_at | date : 'MMMM'}}</td>
+                <td class="py-4">{{item.created_at | date : 'fullDate'}}</td>
+                <td class="py-4 pe-2">
+                    <span class="block p-2 text-sm text-center rounded-md" 
+                          [class]="{ 'bg-thinBlue' : item.operator === 'WAVE', 'text-blueText' : item.operator === 'WAVE',
+                                     'bg-thinOrange' : item.operator === 'OM', 'text-orangeText' : item.operator === 'OM',
+                                    }">
+                        {{item.operator}}
+                    </span>
+                </td> 
+            </tr>
+            <tr *ngIf="!displayedDues.length">
+                <td colspan="6">
+                    <div class="flex justify-center items-center py-4">
+                        <span class="text-2xl font-semibold">Il y'a pas de cotisations disponible</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                   <div class="h-fit flex justify-center items-center py-2">
+                        <pagination-controls 
+                            (pageChange)="pageChanged($event)"
+                            [directionLinks]="true"
+                            previousLabel="Préc"
+                            nextLabel="Suiv"
+                            [autoHide]="true"
+                            [responsive]="true">
+                        </pagination-controls>
+                   </div>
+              </td>
+            </tr>
+            </ng-container>
+            <ng-template #tmplData>
+                <tr>
+                    <td colspan="7">
+                        <app-loader></app-loader>
+                  </td>
+                </tr>
+                
+            </ng-template>
+        </tbody>
+    </table>
+</div>
+
