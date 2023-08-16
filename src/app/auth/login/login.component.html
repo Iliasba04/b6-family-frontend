@@ -1,0 +1,56 @@
+<div class="w-full bg-green2 flex flex-col justify-center items-center py-10 md:py-0 px-5 md:px-0 login-container">
+
+    <div class="w-full md:container bg-white grid grid-cols-1 md:grid-cols-2 min-h-[80vh] divide-y-2 md:divide-x-2 md:divide-y-0">
+        <div class="flex flex-col justify-center items-center space-y-4">
+            <img src="../../../assets/logos/b6-family-logo.png" alt="logo" class="w-auto sm:w-max">
+            <h3 class="text-2xl sm:text-4xl font-montserrat text-center">
+                <span class="text-greenColor font-semibold">Des frères</span>, <span class="text-itemColorActive font-semibold">Une famille</span></h3>
+            <a routerLink="/contributor">Admin</a>
+        </div>
+        <div class="flex flex-col justify-center items-center py-4 space-y-12 font-montserrat">
+            <h2 class="text-darkBlue text-4xl text-center font-barlow font-medium tracking-[2px]">Connexion</h2>
+            <div class="w-full px-5 sm:w-8/12 sm:px-0">
+                <form [formGroup]="loginForm" (ngSubmit)="signIn()">
+                    <div class="flex flex-col mb-5">
+                        <label for="username" class="w-fit mb-3">Nom d'utilisateur</label>
+                        <input type="email" name="username" id="username_id" formControlName="username"
+                               class="border outline-none px-2 h-11 rounded-md bg-gray-100
+                               focus:border-t-0 focus:border-x-0
+                               focus:border-b-4 focus:border-b-greenColor focus:rounded-none focus:bg-green2 focus:shadow-sm
+                               ">
+
+                        <div class="mt-2" *ngIf="loginForm.get('username')?.invalid && isSubmitted">
+                            <p class="text-red-500 text-sm" *ngIf="loginForm.get('username')?.hasError('required')">Le username est requis</p>
+                            <!--<p class="text-red-500 text-sm" *ngIf="loginForm.get('username')?.hasError('email')">Le username est invalide</p>-->
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col mb-3 relative">
+                        <label for="password" class="w-fit mb-3">Mot de passe</label>
+                        <input [type]="passwordVisible ? 'text' : 'password'" name="password" id="password" formControlName="password" minlength="8"
+                               class="border outline-none px-2 h-11 rounded-md bg-gray-100 text-xl
+                               focus:border-t-0 focus:border-x-0
+                               focus:border-b-4 focus:border-b-greenColor focus:rounded-none focus:bg-green2 focus:shadow-sm
+                               ">
+                        <i [ngClass]="passwordVisible ? 'bi bi-eye-fill' : 'bi bi-eye-slash-fill'" class="absolute cursor-pointer text-xl right-3 top-11"
+                        (click)="passwordVisible = !passwordVisible"></i>
+                        <div class="mt-2" *ngIf="loginForm.get('password')?.invalid && isSubmitted">
+                                <p class="text-red-500 text-sm" *ngIf="loginForm.get('password')?.hasError('required')">Le mot de passe est requis</p>
+                                <p class="text-red-500 text-xs" *ngIf="loginForm.get('password')?.hasError('minlength')">Le mot de passe doit comporter au moins de 8 caractères</p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center flex-wrap mb-8">
+                        <span class="text-itemColorActive">Mot de passe oublié ?</span>
+                        <span class="before:content-['*'] before:text-red-600"> Champs obligatoire</span>
+                    </div>
+
+                    <div class="flex justify-center items-center">
+                        <button type="submit" class="w-60 bg-itemColorActive text-white text-center px-4 py-2 rounded-md 
+                                active:bg-red-500 active:scale-95 text-xl disabled:bg-red-200">Se connecter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
