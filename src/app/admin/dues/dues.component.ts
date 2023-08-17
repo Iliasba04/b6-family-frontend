@@ -140,6 +140,7 @@ export class DuesComponent implements OnInit{
         })
         this.selectedUser = userId;
     }
+    this.p = 1;
   }
   pageChanged(event:any){
     this.p = event;
