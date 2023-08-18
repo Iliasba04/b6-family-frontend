@@ -6,8 +6,8 @@ import { ProjectsComponent } from './projects/projects.component';
 import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent },
-  { path: 'dues', component: DuesComponent},
+  //{ path: '', component: DashboardComponent },
+  { path: '', component: DuesComponent},
   { path: 'projects', component: ProjectsComponent},
   { path: 'settings', component: SettingsComponent}
 
