@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { DuesService } from 'src/app/shared/services/dues.service';
 
 @Component({
@@ -20,11 +20,14 @@ export class DuesComponent implements OnInit{
   {label:"Décembre", value:12},
 ];
 selectedMonth = 'Tous';
+public innerWidth:number = 0;
+isMobile : boolean = false;
 
   constructor(private duesService : DuesService){}
   ngOnInit(): void {
     this.getAllDues();
     this.countDues();
+    this.checkView();
   }
 
 
@@ -76,5 +79,14 @@ selectedMonth = 'Tous';
   pageChanged(event:any){
     this.p = event;
     window.scroll(0,0);
+  }
+
+  @HostListener('window:resize',[])
+  onResize():void{
+    this.checkView();
+  }
+  private checkView(){
+    this.innerWidth = window.innerWidth;
+    this.innerWidth <= 768 ? this.isMobile = true : this.isMobile = false; 
   }
 }

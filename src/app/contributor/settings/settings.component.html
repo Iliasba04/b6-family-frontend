@@ -1,4 +1,4 @@
-<div class="w-full min-h-screen flex justify-center px-10 py-4">
+<div class="w-full min-h-screen flex justify-center px-4 md:px-10 py-4">
     <div class="w-full rounded-t-xl"> 
          <div class="bg-white shadow-md rounded-t-xl pb-3">
              <div class="full relative h-48 w-full rounded-t-xl bg-gradient-to-r from-greenColor to-itemColorActive">
@@ -8,9 +8,9 @@
                  </div>
  
              </div>
-             <div class="mt-5 px-7 py-4" [class]="hide === false ? 'transition-all' : ''">
+             <div class="mt-5 px-3 md:px-7 py-4" [class]="hide === false ? 'transition-all' : ''">
                  <form #updateUserForm="ngForm" (ngSubmit)="updateUser(updateUserForm)">
-                     <div class="grid grid-cols-3 gap-4">
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
      
                          <div class="flex flex-col mb-3">
                              <label for="firstname_id" class="w-fit mb-3">Prénom</label>
@@ -65,6 +65,6 @@
                      </button>
                  </form>
              </div>
-         </div>
+         </div> 
     </div>
  </div> 

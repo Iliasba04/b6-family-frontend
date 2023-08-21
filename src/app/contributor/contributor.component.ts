@@ -15,6 +15,12 @@ export class ContributorComponent {
     this.checkView();
   }
 
+  toggle(){
+    if(this.innerWidth <= 768){
+      return
+    }
+    this.toggled = !this.toggled
+  }
   logOut(){
     localStorage.clear();
     this.router.navigate(['/'])
