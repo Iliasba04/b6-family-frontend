@@ -35,6 +35,9 @@ module.exports = {
       fontFamily :{
         'barlow': ['Barlow Condensed', 'sans-serif'],
         'montserrat': ['Montserrat', 'sans-serif']
+      },
+      transitionProperty: {
+        'width': 'width',
       }
     },
   },

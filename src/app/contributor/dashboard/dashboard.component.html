@@ -5,34 +5,26 @@
                     <span class="text-4xl font-barlow">{{userDatas[0].total + userDatas[1].total}}</span>
                     <span class="text-xl font-montserrat">Membres</span>
                 </div>
-                <!--<div class="col-span-2 card bg-green-100 flex flex-col justify-center items-center space-y-1 py-5 rounded-md">
-                    <span class="text-4xl font-barlow">{{ userDatas[0]._id === true ? userDatas[0].total : userDatas[1].total}}</span>
-                    <span class="text-xl font-montserrat">Utilisateurs actifs</span>
-                </div>
-                <div class="col-span-2 card bg-red-100 flex flex-col justify-center items-center space-y-1 py-5 rounded-md">
-                    <span class="text-4xl font-barlow">{{ userDatas[1]._id === false ? userDatas[1].total : userDatas[0].total}}</span>
-                    <span class="text-xl font-montserrat">Utilisateurs bloqués</span>
-                </div>-->
             </div>
 
-            <div class="grid grid-cols-5 gap-4 py-5 px-2">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 py-5 px-2">
 
                 <div class="card bg-gray-300 flex flex-col justify-center items-center space-y-1 py-5 rounded-md">
                     <span class="text-4xl font-barlow">{{duesDatas[0].total + duesDatas[1].total}}</span>
                     <span class="text-xl font-montserrat">Cotisations</span>
                 </div>
-                <div class="col-span-2 card bg-blue-100 flex flex-col justify-center items-center space-y-1 py-5 rounded-md">
+                <div class="md:col-span-2 card bg-blue-100 flex flex-col justify-center items-center space-y-1 py-5 rounded-md">
                     <span class="text-4xl font-barlow">{{ duesDatas[0]._id === 'WAVE' ? duesDatas[0].total : duesDatas[1].total}}</span>
                     <span class="text-xl font-montserrat">Cotisations via WAVE</span>
                 </div>
-                <div class="col-span-2 card bg-orange-100 flex flex-col justify-center items-center space-y-1 py-5 rounded-md">
+                <div class="md:col-span-2 card bg-orange-100 flex flex-col justify-center items-center space-y-1 py-5 rounded-md">
                     <span class="text-4xl font-barlow">{{ duesDatas[1]._id === 'OM' ? duesDatas[1].total : duesDatas[0].total}}</span>
                     <span class="text-xl font-montserrat">Cotisations via OM</span>
                 </div>
             </div>
         <div class="px-2">
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="col-span-2">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                    <div class="md:col-span-2">
                         <app-bar-chart [datas]="monthDatas"></app-bar-chart>
                     </div>
                     <div class="border shadow-lg p-2">

@@ -4,6 +4,6 @@
 
 export const environment = {
   production: false,
-  //backendUri : 'http://[::1]:3000',
-  backendUri : 'https://boldof-backend.vercel.app',
+  backendUri : 'http://[::1]:3000',
+  //backendUri : 'https://boldof-backend.vercel.app',
 };
